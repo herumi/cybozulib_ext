@@ -12,6 +12,6 @@ How to use
 
 directory position
 
-    <word dir>/cybozulib
+    <work dir>/cybozulib
               /cybozulib_ext ; necessary for Windows if use zlib or openssl
 
