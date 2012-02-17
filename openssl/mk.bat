@@ -24,6 +24,8 @@ popd
 :skip
 rename openssl openssl.old
 rename openssl-%VAR% openssl
+md ..\..\cybozulib\bin
+md ..\..\cybozulib\lib
 copy openssl\%OUTPATH%\ssleay32.lib ..\..\cybozulib\lib
 copy openssl\%OUTPATH%\libeay32.lib ..\..\cybozulib\lib
 copy openssl\%OUTPATH%\ssleay32.dll ..\..\cybozulib\bin
