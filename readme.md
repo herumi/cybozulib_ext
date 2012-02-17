@@ -10,6 +10,8 @@ See documents about license in each package.
 How to use
 -----
 
-  <word dir>/cybozulib
-            /cybozulib_ext ; necessary for Windows if use zlib or openssl
+directory position
+
+    <word dir>/cybozulib
+              /cybozulib_ext ; necessary for Windows if use zlib or openssl
 
