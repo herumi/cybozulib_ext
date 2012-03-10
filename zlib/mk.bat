@@ -19,8 +19,6 @@ md include
 pushd zlib-%VAR%
 copy zlib.h ..\include
 copy zconf.h ..\include
-md ..\..\..\cybozulib\bin
-md ..\..\..\cybozulib\lib
 copy zlib1.dll ..\..\..\cybozulib\bin
 copy zdll.lib ..\..\..\cybozulib\lib
 copy zlib.lib ..\..\..\cybozulib\lib
