@@ -1,6 +1,6 @@
 @echo off
 set PATH=..\tool;%PATH%
-set VAR=1.0.0g
+set VAR=1.0.1c
 rem goto skip
 tar xvfz openssl-%VAR%.tar.gz
 pushd openssl-%VAR%
@@ -8,7 +8,7 @@ pushd openssl-%VAR%
 if /i "%PROCESSOR_ARCHITECTURE%" == "AMD64" (
 	call perl Configure VC-WIN64A --prefix=../openssl
 	call ms\do_win64a
-	echo "please remove "bufferoverflowu.lib" in ms\nttdll.mak
+rem	echo "please remove "bufferoverflowu.lib" in ms\nttdll.mak
 	pause
 ) else (
 	call perl Configure VC-WIN32 --prefix=../openssl
