@@ -8,8 +8,6 @@ pushd openssl-%VAR%
 if /i "%PROCESSOR_ARCHITECTURE%" == "AMD64" (
 	call perl Configure VC-WIN64A --prefix=../openssl
 	call ms\do_win64a
-rem	echo "please remove "bufferoverflowu.lib" in ms\nttdll.mak
-	pause
 ) else (
 	call perl Configure VC-WIN32 --prefix=../openssl
 	call ms\do_nasm
