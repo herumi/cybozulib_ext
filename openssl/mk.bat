@@ -20,8 +20,10 @@ rm -rf openssl.old
 rename openssl openssl.old
 rename openssl-%VAR% openssl
 :skip
-copy openssl\out32dll\ssleay32.lib ..\..\cybozulib\lib
-copy openssl\out32dll\libeay32.lib ..\..\cybozulib\lib
-copy openssl\out32dll\ssleay32.dll ..\..\cybozulib\bin
-copy openssl\out32dll\libeay32.dll ..\..\cybozulib\bin
+md lib
+md dll
+copy openssl\out32dll\ssleay32.lib lib
+copy openssl\out32dll\libeay32.lib lib
+copy openssl\out32dll\ssleay32.dll dll
+copy openssl\out32dll\libeay32.dll dll
 xcopy /S /D /E /I /Y openssl\inc32 include
