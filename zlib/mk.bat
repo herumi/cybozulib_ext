@@ -16,10 +16,12 @@ if /i "%PROCESSOR_ARCHITECTURE%" == "AMD64" (
 
 popd
 md include
+md lib
+rem md dll
 pushd zlib-%VAR%
 copy zlib.h ..\include
 copy zconf.h ..\include
-copy zlib1.dll ..\..\..\cybozulib\bin
-copy zdll.lib ..\..\..\cybozulib\lib
-copy zlib.lib ..\..\..\cybozulib\lib
+copy zlib.lib ..\lib
+rem copy zdll.lib ..\lib
+rem copy zlib1.dll ..\dll
 popd
