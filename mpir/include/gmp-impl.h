@@ -6,7 +6,7 @@
 Copyright 1991, 1993, 1994, 1995, 1996, 1997, 1999, 2000, 2001, 2002, 2003,
 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
-Copyright 2009 William Hart
+Copyright 2009, 2013 William Hart
 
 
 This file is part of the GNU MP Library.
@@ -942,16 +942,16 @@ __GMP_DECLSPEC mp_limb_t mpn_divexact_byfobm1 __GMP_PROTO ((mp_ptr, mp_srcptr, m
 #endif
 
 #define mpn_add_err1_n  __MPN(add_err1_n)
-mp_limb_t mpn_add_err1_n (mp_ptr, mp_srcptr, mp_srcptr, mp_ptr, mp_srcptr, mp_size_t, mp_limb_t);
+__GMP_DECLSPEC mp_limb_t mpn_add_err1_n (mp_ptr, mp_srcptr, mp_srcptr, mp_ptr, mp_srcptr, mp_size_t, mp_limb_t);
 
 #define mpn_sub_err1_n  __MPN(sub_err1_n)
-mp_limb_t mpn_sub_err1_n (mp_ptr, mp_srcptr, mp_srcptr, mp_ptr, mp_srcptr, mp_size_t, mp_limb_t);
+__GMP_DECLSPEC mp_limb_t mpn_sub_err1_n (mp_ptr, mp_srcptr, mp_srcptr, mp_ptr, mp_srcptr, mp_size_t, mp_limb_t);
 
 #define mpn_add_err2_n  __MPN(add_err2_n)
-mp_limb_t mpn_add_err2_n (mp_ptr, mp_srcptr, mp_srcptr, mp_ptr, mp_srcptr, mp_srcptr, mp_size_t, mp_limb_t);
+__GMP_DECLSPEC mp_limb_t mpn_add_err2_n (mp_ptr, mp_srcptr, mp_srcptr, mp_ptr, mp_srcptr, mp_srcptr, mp_size_t, mp_limb_t);
 
 #define mpn_sub_err2_n  __MPN(sub_err2_n)
-mp_limb_t mpn_sub_err2_n (mp_ptr, mp_srcptr, mp_srcptr, mp_ptr, mp_srcptr, mp_srcptr, mp_size_t, mp_limb_t);
+__GMP_DECLSPEC mp_limb_t mpn_sub_err2_n (mp_ptr, mp_srcptr, mp_srcptr, mp_ptr, mp_srcptr, mp_srcptr, mp_size_t, mp_limb_t);
 
 #define mpn_divrem_1c __MPN(divrem_1c)
 __GMP_DECLSPEC mp_limb_t mpn_divrem_1c __GMP_PROTO ((mp_ptr, mp_size_t, mp_srcptr, mp_size_t, mp_limb_t, mp_limb_t));
@@ -2688,62 +2688,61 @@ mp_limb_t mpn_invert_limb _PROTO ((mp_limb_t)) ATTRIBUTE_CONST;
   } while (0)
 #endif
 
-// This macro is only for compatibility with undocumented GMP macros , do not use
-#define invert_pi1(dinv, d1, d0)				\
-  do {								\
-    mp_limb_t v, p, t1, t0, mask;				\
-    invert_limb (v, d1);					\
-    p = d1 * v;							\
-    p += d0;							\
-    if (p < d0)							\
-      {								\
-	v--;							\
-	mask = -(p >= d1);					\
-	p -= d1;						\
-	v += mask;						\
-	p -= mask & d1;						\
-      }								\
-    umul_ppmm (t1, t0, d0, v);					\
-    p += t1;							\
-    if (p < t1)							\
-      {								\
-        v--;							\
-	if (UNLIKELY (p >= d1))					\
-	  {							\
-	    if (p > d1 || t0 >= d0)				\
-	      v--;						\
-	  }							\
-      }								\
-    (dinv).inv32 = v;						\
+#define mpir_invert_pi1(dinv, d1, d0)					\
+  do {									\
+    mp_limb_t _v, _p, _t1, _t0, _mask;					\
+    invert_limb (_v, d1);						\
+    _p = (d1) * _v;							\
+    _p += (d0);								\
+    if (_p < (d0))							\
+      {									\
+	_v--;								\
+	_mask = -(mp_limb_t) (_p >= (d1));				\
+	_p -= (d1);							\
+	_v += _mask;							\
+	_p -= _mask & (d1);						\
+      }									\
+    umul_ppmm (_t1, _t0, d0, _v);					\
+    _p += _t1;								\
+    if (_p < _t1)							\
+      {									\
+	_v--;								\
+	if (UNLIKELY (_p >= (d1)))					\
+	  {								\
+	    if (_p > (d1) || _t0 >= (d0))				\
+	      _v--;							\
+	  }								\
+      }									\
+    dinv = _v;							\
   } while (0)
 
-#define invert_1(dinv, d1, d0)				\
-  do {								\
-    mp_limb_t v, p, t1, t0, mask;				\
-    invert_limb (v, d1);					\
-    p = d1 * v;							\
-    p += d0;							\
-    if (p < d0)							\
-      {								\
-    v--;							\
-    mask = -(p >= d1);					\
-    p -= d1;						\
-    v += mask;						\
-    p -= mask & d1;						\
-      }								\
-    umul_ppmm (t1, t0, d0, v);					\
-    p += t1;							\
-    if (p < t1)							\
-      {								\
-        v--;							\
-    if (UNLIKELY (p >= d1))					\
-      {							\
-        if (p > d1 || t0 >= d0)				\
-          v--;						\
-      }							\
-      }								\
-    dinv = v;						\
-  } while (0)
+/* For compatibility with GMP only */
+#define invert_pi1(dinv, d1, d0)				\
+   mpir_invert_pi1((dinv).inv32, d1, d0)
+
+#define mpir_invert_pi2(dinv, d1, d2)                        \
+do {                                                         \
+   mp_limb_t __q, __r[2], __p[2], __cy;                      \
+                                                             \
+   if ((d2) + 1 == 0 && (d1) + 1 == 0)                       \
+      (dinv) = 0;                                            \
+   else {                                                    \
+      if ((d1) + 1 == 0)                                     \
+         (dinv) = ~(d1), __r[1] = ~(d2);                     \
+      else                                                   \
+         udiv_qrnnd((dinv), __r[1], ~(d1), ~(d2), (d1) + 1); \
+                                                             \
+      if ((d2) + 1 != 0) {                                   \
+         __r[0] = 0;                                         \
+         umul_ppmm(__p[1], __p[0], (dinv), ~(d2));           \
+         __cy = mpn_add_n(__r, __r, __p, 2);                 \
+                                                             \
+         __p[0] = (d2) + 1, __p[1] = (d1) + ((d2) + 1 == 0); \
+         while (__cy || mpn_cmp(__r, __p, 2) >= 0)           \
+         { (dinv)++; __cy -= mpn_sub_n(__r, __r, __p, 2); }  \
+      }                                                      \
+   }                                                         \
+} while (0)
 
 /* Compute quotient the quotient and remainder for n / d. Requires d
    >= B^2 / 2 and n < d B. di is the inverse
@@ -2753,24 +2752,23 @@ mp_limb_t mpn_invert_limb _PROTO ((mp_limb_t)) ATTRIBUTE_CONST;
    NOTE: Output variables are updated multiple times. Only some inputs
    and outputs may overlap.
 */
-#define tdiv_qr_3by2(q, r1, r0, n2, n1, n0, d1, d0, dinv)		\
+#define udiv_qr_3by2(q, r1, r0, n2, n1, n0, d1, d0, dinv)		\
   do {									\
-    mp_limb_t _q0, _t1, _t0, _mask;					\
+    mp_limb_t _q0, _t1, _t0;					\
     umul_ppmm ((q), _q0, (n2), (dinv));					\
     add_ssaaaa ((q), _q0, (q), _q0, (n2), (n1));			\
                                     \
     /* Compute the two most significant limbs of n - q'd */		\
     (r1) = (n1) - (d1) * (q);						\
-    (r0) = (n0);							\
-    sub_ddmmss ((r1), (r0), (r1), (r0), (d1), (d0));			\
+    sub_ddmmss ((r1), (r0), (r1), (n0), (d1), (d0));			\
     umul_ppmm (_t1, _t0, (d0), (q));					\
     sub_ddmmss ((r1), (r0), (r1), (r0), _t1, _t0);			\
     (q)++;								\
                                     \
     /* Conditionally adjust q and the remainders */			\
-    _mask = - (mp_limb_t) ((r1) >= _q0);				\
-    (q) += _mask;							\
-    add_ssaaaa ((r1), (r0), (r1), (r0), _mask & (d1), _mask & (d0));	\
+    if ((r1) >= _q0) {				\
+       (q)--;							\
+       add_ssaaaa ((r1), (r0), (r1), (r0), (d1), (d0));	} \
     if (UNLIKELY ((r1) >= (d1)))					\
       {									\
     if ((r1) > (d1) || (r0) >= (d0))				\
@@ -2780,6 +2778,37 @@ mp_limb_t mpn_invert_limb _PROTO ((mp_limb_t)) ATTRIBUTE_CONST;
       }								\
       }									\
   } while (0)
+
+#define mpir_divapprox32_preinv2(q, a_hi, a_lo, dinv) \
+   do { \
+      mp_limb_t __q2, __q3, __q4; \
+      umul_ppmm((q), __q2, (a_hi), (dinv)); \
+      umul_ppmm(__q3, __q4, (a_lo), (dinv)); \
+      add_ssaaaa((q), __q2, (q), __q2, (a_hi), (a_lo)); \
+      add_ssaaaa((q), __q2, (q), __q2, 0, __q3); \
+   } while (0)
+
+#define mpir_divrem32_preinv2(q, r2, r3, a1, a2, a3, d11, d21, d1, d2, dinv) \
+   do {                                                                 \
+      mp_limb_t __q2, __q3, __q4, __p1, __p2, __cy;                     \
+      umul_ppmm((q), __q2, (a1), (dinv));                               \
+      add_ssaaaa((q), __q2, (q), __q2, (a1), (a2));                     \
+      umul_ppmm(__p1, __p2, (q), (d21));                                \
+      (r3) = (a3);                                                      \
+      (r2) = (a2) - (q)*(d11);                                          \
+      sub_ddmmss((r2), (r3), (r2), (r3), __p1, __p2);                   \
+      sub_ddmmss((r2), (r3), (r2), (r3), (d11), (d21));                 \
+      (q)++;                                                            \
+      if ((r2) >= __q2)                                                 \
+      { (q)--; add_ssaaaa((r2), (r3), (r2), (r3), (d11), (d21)); }      \
+      add_333(__cy, (r2), (r3), 0, (r2), (r3), 0, 0, (q));              \
+      while (UNLIKELY(__cy != 0 || (r2) >= (d1)))                       \
+      {                                                                 \
+         if ((r2) == (d1) && (r3) < (d2) && __cy == 0) break;           \
+         sub_333(__cy, (r2), (r3), __cy, (r2), (r3), 0, (d1), (d2));    \
+         (q)++;                                                         \
+      }                                                                 \
+   } while (0)
 
 #ifndef udiv_qrnnd_preinv
 #define udiv_qrnnd_preinv udiv_qrnnd_preinv2
@@ -2858,43 +2887,6 @@ mp_limb_t mpn_invert_limb _PROTO ((mp_limb_t)) ATTRIBUTE_CONST;
   } while (0)
 
 
-// This macro is only for compatibility with undocumented GMP macros , do not use
-/* Compute quotient the quotient and remainder for n / d. Requires d
-   >= B^2 / 2 and n < d B. di is the inverse
-
-     floor ((B^3 - 1) / (d0 + d1 B)) - B.
-
-   NOTE: Output variables are updated multiple times. Only some inputs
-   and outputs may overlap.
-*/
-#define udiv_qr_3by2(q, r1, r0, n2, n1, n0, d1, d0, dinv)		\
-  do {									\
-    mp_limb_t _q0, _t1, _t0, _mask;					\
-    umul_ppmm ((q), _q0, (n2), (dinv));					\
-    add_ssaaaa ((q), _q0, (q), _q0, (n2), (n1));			\
-									\
-    /* Compute the two most significant limbs of n - q'd */		\
-    (r1) = (n1) - (d1) * (q);						\
-    (r0) = (n0);							\
-    sub_ddmmss ((r1), (r0), (r1), (r0), (d1), (d0));			\
-    umul_ppmm (_t1, _t0, (d0), (q));					\
-    sub_ddmmss ((r1), (r0), (r1), (r0), _t1, _t0);			\
-    (q)++;								\
-									\
-    /* Conditionally adjust q and the remainders */			\
-    _mask = - (mp_limb_t) ((r1) >= _q0);				\
-    (q) += _mask;							\
-    add_ssaaaa ((r1), (r0), (r1), (r0), _mask & (d1), _mask & (d0));	\
-    if (UNLIKELY ((r1) >= (d1)))					\
-      {									\
-	if ((r1) > (d1) || (r0) >= (d0))				\
-	  {								\
-	    (q)++;							\
-	    sub_ddmmss ((r1), (r0), (r1), (r0), (d1), (d0));		\
-	  }								\
-      }									\
-  } while (0)
-
 #ifndef mpn_preinv_divrem_1  /* if not done with cpuvec in a fat binary */
 #define mpn_preinv_divrem_1  __MPN(preinv_divrem_1)
 __GMP_DECLSPEC mp_limb_t mpn_preinv_divrem_1 _PROTO ((mp_ptr, mp_size_t, mp_srcptr, mp_size_t, mp_limb_t, mp_limb_t, int));
@@ -2949,7 +2941,7 @@ __GMP_DECLSPEC mp_limb_t mpn_mod_34lsub1 _PROTO ((mp_srcptr, mp_size_t)) __GMP_A
 
 #ifndef mpn_divexact_1  /* if not done with cpuvec in a fat binary */
 #define mpn_divexact_1 __MPN(divexact_1)
-void    mpn_divexact_1 _PROTO ((mp_ptr, mp_srcptr, mp_size_t, mp_limb_t));
+__GMP_DECLSPEC void mpn_divexact_1 _PROTO ((mp_ptr, mp_srcptr, mp_size_t, mp_limb_t));
 #endif
 
 #define MPN_DIVREM_OR_DIVEXACT_1(dst, src, size, divisor)                     \
@@ -2965,7 +2957,7 @@ void    mpn_divexact_1 _PROTO ((mp_ptr, mp_srcptr, mp_size_t, mp_limb_t));
 
 #ifndef mpn_modexact_1c_odd  /* if not done with cpuvec in a fat binary */
 #define mpn_modexact_1c_odd  __MPN(modexact_1c_odd)
-mp_limb_t mpn_modexact_1c_odd _PROTO ((mp_srcptr src, mp_size_t size,
+__GMP_DECLSPEC mp_limb_t mpn_modexact_1c_odd _PROTO ((mp_srcptr src, mp_size_t size,
                                        mp_limb_t divisor, mp_limb_t c)) __GMP_ATTRIBUTE_PURE;
 #endif
 
@@ -3737,6 +3729,8 @@ void tc4_addmul_1(mp_ptr wp, mp_size_t * wn, mp_srcptr xp, mp_size_t xn, mp_limb
 void tc4_submul_1(mp_ptr wp, mp_size_t * wn, mp_srcptr x, mp_size_t xn, mp_limb_t y);
 
 void tc4_copy (mp_ptr yp, mp_size_t * yn, mp_size_t offset, mp_srcptr xp, mp_size_t xn);
+
+void __divappr_helper(mp_ptr qp, mp_ptr np, mp_srcptr dp, mp_size_t qn);
 
 /* __GMPF_BITS_TO_PREC applies a minimum 53 bits, rounds upwards to a whole
    limb and adds an extra limb.  __GMPF_PREC_TO_BITS drops that extra limb,

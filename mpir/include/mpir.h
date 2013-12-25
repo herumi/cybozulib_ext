@@ -15,6 +15,10 @@ License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with the GNU MP Library.  If not, see http://www.gnu.org/licenses/.  */
 #ifndef __GMP_H__
+#ifdef __SUNPRO_CC    /* See: http://trac.sagemath.org/sage_trac/ticket/7849 */
+#include <stddef.h>   /* This is Bill Hart's fix, but I've applied it only */
+#include <stdarg.h>   /* on Sun Studio */
+#endif 
 #if defined (__cplusplus)
 #include <iosfwd>   /* for std::istream, std::ostream, std::string */
 #include <cstdio>
@@ -784,8 +788,8 @@ __GMP_DECLSPEC void mpz_neg __GMP_PROTO ((mpz_ptr, mpz_srcptr));
 #endif
 #define mpz_nextprime __gmpz_nextprime
 __GMP_DECLSPEC void mpz_nextprime __GMP_PROTO ((mpz_ptr, mpz_srcptr));
-#define mpz_next_likely_prime __gmpz_next_likely_prime
-__GMP_DECLSPEC void mpz_next_likely_prime __GMP_PROTO ((mpz_ptr, mpz_srcptr, gmp_randstate_t));
+#define mpz_next_prime_candidate __gmpz_next_prime_candidate
+__GMP_DECLSPEC void mpz_next_prime_candidate __GMP_PROTO ((mpz_ptr, mpz_srcptr, gmp_randstate_t));
 #define mpz_out_raw __gmpz_out_raw
 #ifdef _GMP_H_HAVE_FILE
 __GMP_DECLSPEC size_t mpz_out_raw __GMP_PROTO ((FILE *, mpz_srcptr));
