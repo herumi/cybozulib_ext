@@ -1,6 +1,6 @@
 @echo off
 set PATH=..\tool;%PATH%
-set VAR=1.0.2
+set VAR=1.0.2a
 rem goto skip
 tar xvfz openssl-%VAR%.tar.gz
 pushd openssl-%VAR%
