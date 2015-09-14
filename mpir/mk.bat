@@ -1,6 +1,6 @@
 @echo off
-echo copy vsyasm.exe into C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin
-set MPIR_VER=2.6.0
+echo copy vsyasm.exe into C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin
+set MPIR_VER=2.7.0
 bzip2 -dc mpir-%MPIR_VER%.tar.bz2|tar xvf -
 cd mpir-%MPIR_VER%\build.vc10
 mpir.sln

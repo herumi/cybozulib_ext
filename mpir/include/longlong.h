@@ -281,7 +281,6 @@ MA 02110-1301, USA. */
 
 #if !defined( BSWAP_LIMB )
 #  pragma intrinsic(_byteswap_uint64)
-#    define BSWAP_LIMB
 #    define BSWAP_LIMB(dst, src)  dst = _byteswap_uint64(src)
 #endif
 

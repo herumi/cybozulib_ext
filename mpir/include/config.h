@@ -3,13 +3,8 @@
 #define HAVE_NATIVE_mpn_add_err2_n 1 
 #define HAVE_NATIVE_mpn_add_n 1 
 #define HAVE_NATIVE_mpn_add_nc 1 
-#define HAVE_NATIVE_mpn_addadd_n 1 
-#define HAVE_NATIVE_mpn_addlsh1_n 1 
-#define HAVE_NATIVE_mpn_addlsh_n 1 
 #define HAVE_NATIVE_mpn_addmul_1 1 
-#define HAVE_NATIVE_mpn_addmul_1c 1 
 #define HAVE_NATIVE_mpn_addmul_2 1 
-#define HAVE_NATIVE_mpn_addsub_n 1 
 #define HAVE_NATIVE_mpn_and_n 1 
 #define HAVE_NATIVE_mpn_andn_n 1 
 #define HAVE_NATIVE_mpn_com_n 1 
@@ -23,45 +18,41 @@
 #define HAVE_NATIVE_mpn_divrem_2 1 
 #define HAVE_NATIVE_mpn_divrem_euclidean_qr_1 1 
 #define HAVE_NATIVE_mpn_divrem_euclidean_qr_2 1 
-#define HAVE_NATIVE_mpn_divrem_hensel_qr_1_2 1 
+#define HAVE_NATIVE_mpn_divrem_hensel_qr_1_1 1 
 #define HAVE_NATIVE_mpn_hamdist 1 
 #define HAVE_NATIVE_mpn_ior_n 1 
 #define HAVE_NATIVE_mpn_iorn_n 1 
 #define HAVE_NATIVE_mpn_karaadd 1 
 #define HAVE_NATIVE_mpn_karasub 1 
 #define HAVE_NATIVE_mpn_lshift 1 
+#define HAVE_NATIVE_mpn_lshift1 1 
+#define HAVE_NATIVE_mpn_lshiftc 1 
 #define HAVE_NATIVE_mpn_mod_1_1 1 
 #define HAVE_NATIVE_mpn_mod_1_2 1 
 #define HAVE_NATIVE_mpn_mod_1_3 1 
 #define HAVE_NATIVE_mpn_modexact_1_odd 1 
 #define HAVE_NATIVE_mpn_modexact_1c_odd 1 
 #define HAVE_NATIVE_mpn_mul_1 1 
-#define HAVE_NATIVE_mpn_mul_1c 1 
 #define HAVE_NATIVE_mpn_mul_2 1 
 #define HAVE_NATIVE_mpn_mul_basecase 1 
 #define HAVE_NATIVE_mpn_mulmid_basecase 1 
 #define HAVE_NATIVE_mpn_nand_n 1 
-#define HAVE_NATIVE_mpn_nehalem_mbc1 1 
-#define HAVE_NATIVE_mpn_nehalem_mbc2 1 
 #define HAVE_NATIVE_mpn_nior_n 1 
 #define HAVE_NATIVE_mpn_popcount 1 
 #define HAVE_NATIVE_mpn_preinv_divrem_1 1 
 #define HAVE_NATIVE_mpn_redc_1 1 
-#define HAVE_NATIVE_mpn_rsh1add_n 1 
-#define HAVE_NATIVE_mpn_rsh1sub_n 1 
+#define HAVE_NATIVE_mpn_rsh_divrem_hensel_qr_1_1 1 
 #define HAVE_NATIVE_mpn_rsh_divrem_hensel_qr_1_2 1 
 #define HAVE_NATIVE_mpn_rshift 1 
+#define HAVE_NATIVE_mpn_sandybridge_mbc1 1 
+#define HAVE_NATIVE_mpn_sandybridge_mbc2 1 
 #define HAVE_NATIVE_mpn_sqr_basecase 1 
 #define HAVE_NATIVE_mpn_store 1 
 #define HAVE_NATIVE_mpn_sub_err1_n 1 
 #define HAVE_NATIVE_mpn_sub_err2_n 1 
 #define HAVE_NATIVE_mpn_sub_n 1 
 #define HAVE_NATIVE_mpn_sub_nc 1 
-#define HAVE_NATIVE_mpn_subadd_n 1 
-#define HAVE_NATIVE_mpn_sublsh1_n 1 
 #define HAVE_NATIVE_mpn_submul_1 1 
-#define HAVE_NATIVE_mpn_submul_1c 1 
-#define HAVE_NATIVE_mpn_sumdiff_n 1 
 #define HAVE_NATIVE_mpn_udiv_qrnnd 1 
 #define HAVE_NATIVE_mpn_umul_ppmm 1 
 #define HAVE_NATIVE_mpn_xnor_n 1 
@@ -90,6 +81,10 @@ MA 02111-1307, USA. */
 
 #if _MSC_VER >= 1600 && !defined( HAVE_STDINT_H ) 
 #  define HAVE_STDINT_H 1
+#endif
+
+#if _MSC_VER >= 1800 
+#  define HAVE_INTTYPES_H 1
 #endif
 
 #define HAVE_LITTLE_ENDIAN 1
@@ -188,9 +183,6 @@ MA 02111-1307, USA. */
 
 /* Define if the system has the type `intmax_t'. */
 #undef HAVE_INTMAX_T
-
-/* Define if you have the <inttypes.h> header file. */
-#undef HAVE_INTTYPES_H
 
 /* Define one (just one) of the following for the endiannes of `mp_limb_t'.
    If the endianness is not a simple big or little, or you don't know what
@@ -435,7 +427,6 @@ MA 02111-1307, USA. */
 #define access _access
 #define strcasecmp _stricmp
 #define strncasecmp	_strnicmp
-#define snprintf _snprintf
 #define alloca _alloca
 #define HAVE_STRCASECMP		1
 #define HAVE_STRNCASECMP	1
