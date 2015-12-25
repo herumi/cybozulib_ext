@@ -1,5 +1,5 @@
 #!/bin/sh
-VER=1.0.2d
+VER=1.0.2e
 tar xvfz openssl-${VER}.tar.gz
 pushd openssl-${VER}
 
