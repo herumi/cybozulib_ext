@@ -14,17 +14,13 @@ if /i "%PROCESSOR_ARCHITECTURE%" == "AMD64" (
 	call ms\do_nasm
 )
 
-nmake -f ms\ntdll.mak
-nmake -f ms\ntdll.mak install
+nmake -f ms\nt.mak
+nmake -f ms\nt.mak install
 popd
 rm -rf openssl.old
 rename openssl openssl.old
 rename openssl-%VAR% openssl
 :skip
-md lib
-md dll
-copy openssl\out32dll\ssleay32.lib lib
-copy openssl\out32dll\libeay32.lib lib
-copy openssl\out32dll\ssleay32.dll dll
-copy openssl\out32dll\libeay32.dll dll
+rem copy openssl\out32dll\ssleay32.lib ..\lib\mt\14
+copy openssl\out32dll\libeay32.lib ..\lib\mt\14
 xcopy /S /D /E /I /Y openssl\inc32 include
