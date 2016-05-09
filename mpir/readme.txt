@@ -1,6 +1,12 @@
 https://github.com/wbhart/mpir
 original name of mpir.zip is mpir-3acc37364d11aef08ae30c3875a0696c6c209c5a.zip
 
+cd build.vc14
+prebuild sandybridge x64
+open mpir.sln and build ; use /MT
+-----------------------------------------------------------------------------
+old version
+
 cd build.vc12
 prebuild nehalem x64
 ; for vc14
