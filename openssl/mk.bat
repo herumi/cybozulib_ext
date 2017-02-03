@@ -1,7 +1,7 @@
 rem http://www.openssl.org/
 @echo off
 set PATH=..\tool;%PATH%
-set VAR=1.0.2h
+set VAR=1.0.2k
 rem goto skip
 tar xvfz openssl-%VAR%.tar.gz
 pushd openssl-%VAR%
@@ -22,5 +22,7 @@ rename openssl openssl.old
 rename openssl-%VAR% openssl
 :skip
 rem copy openssl\out32dll\ssleay32.lib ..\lib\mt\14
-copy openssl\out32dll\libeay32.lib ..\lib\mt\14
-xcopy /S /D /E /I /Y openssl\inc32 include
+copy openssl\out32\libeay32.lib ..\lib\mt\14
+copy openssl\out32\ssleay32.lib ..\lib\mt\14
+copy openssl\ms\applink.c ..\include\openssl
+xcopy /S /D /E /I /Y openssl\inc32 ..\include
